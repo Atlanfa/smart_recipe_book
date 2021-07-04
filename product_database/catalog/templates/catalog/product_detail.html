@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Product name: {{ product.name }}</h1>
+
+  <div style="margin-left:20px;margin-top:20px">
+    <h2>Where to by</h2>
+    {% for price in product.price_set.all %}
+    <hr>
+    <p><strong>Name:</strong> {{ price.product.name }}</p>
+    <p><strong>Price:</strong> {{ price.price }}</p>
+    <p><strong>Store:</strong> <a href="{{ price.store.get_absolute_url }}">{{ price.store }}</a> </p>
+    {% endfor %}
+  </div>
+{% endblock %}

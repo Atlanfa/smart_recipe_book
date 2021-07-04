@@ -1,0 +1,22 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>My Prices List</h1>
+
+    {% if price_list %}
+    <ul>
+
+      {% for price in price_list %}
+      <li>
+        <a href="{{ price.product.get_absolute_url }}">{{ price.product.name }}</a><a href="{{ price.store.get_absolute_url }}"> {{ price.store }} {{ price.store.location }}</a> {{ price.price }}
+          {% if user.is_authenticated %}- <a href="{% url 'renew-price' price.id %}">Renew</a> - <a href="{% url 'price_delete' price.id %}">Delete</a>  {% endif %}
+
+
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>There are no products in the database which was added by you.</p>
+    {% endif %}
+{% endblock %}

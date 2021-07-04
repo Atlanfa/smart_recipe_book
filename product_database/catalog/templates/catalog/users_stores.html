@@ -1,0 +1,20 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>My Stores List</h1>
+
+    {% if store_list %}
+    <ul>
+
+      {% for store in store_list %}
+      <li>
+        <a href="{{ store.get_absolute_url }}">{{ store.name }} {{ store.location }}</a>
+        {% if user.is_authenticated %}- <a href="{% url 'renew-store' store.id %}">Renew</a> - <a href="{% url 'store_delete' store.id %}">Delete</a>  {% endif %}
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>There are no stores in the database which was added by you.</p>
+    {% endif %}
+{% endblock %}

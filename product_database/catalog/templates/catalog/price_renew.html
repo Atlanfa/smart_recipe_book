@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+{% block content %}
+
+    <h1>Price renew</h1>
+    <p>Store: {{price_inst.store}}</p>
+    <p>Product: {{price_inst.product}}</p>
+    <p>Price: {{price_inst.price}}</p>
+
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <table>
+        {{ form }}
+        </table>
+        <input type="submit" value="Submit" />
+    </form>
+
+{% endblock %}

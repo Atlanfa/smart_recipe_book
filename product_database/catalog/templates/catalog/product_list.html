@@ -11,9 +11,9 @@
         <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
                 {% if user.is_authenticated %}
                 {% if user not in product.favorite.all %}
-                - <a href="{% url 'add_to_favorite' product.id %}">Add to favorite</a>
+                - <a href="{% url 'add_product_to_favorite' product.id %}">Add to favorite</a>
                 {% else %}
-                - <a href="{% url 'delete_from_favorite' product.id %}">Delete from favorite</a>
+                - <a href="{% url 'delete_product_from_favorite' product.id %}">Delete from favorite</a>
 
 
                 {% endif %}

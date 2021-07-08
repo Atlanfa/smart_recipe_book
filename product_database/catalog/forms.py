@@ -54,6 +54,7 @@ class AddDishForm(forms.Form):
     recipe = forms.CharField(max_length=10000)
     kitchen_utensils = forms.ModelMultipleChoiceField(queryset=KitchenUtensil.objects.all())
 
+
 class RenewDishForm(forms.Form):
     name = forms.CharField(max_length=200)
     recipe = forms.CharField(max_length=10000)

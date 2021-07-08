@@ -48,6 +48,15 @@ class DishListView(generic.ListView):
     paginate_by = 20
 
 
+class KitchenUtensilListView(generic.ListView):
+    model = KitchenUtensil
+    paginate_by = 20
+
+
+class KitchenUtensilDetailView(generic.DetailView):
+    model = KitchenUtensil
+
+
 class DishDetailView(generic.DetailView):
     model = Dish
 
@@ -69,6 +78,15 @@ class UsersFavoriteProductsListView(LoginRequiredMixin, generic.ListView):
         return Product.objects.filter(favorite=self.request.user)
 
 
+class UsersFavoriteDishesListView(LoginRequiredMixin, generic.ListView):
+    model = Product
+    template_name = 'catalog/users_favorite_dishes.html'
+    paginate_by = 20
+
+    def get_queryset(self):
+        return Dish.objects.filter(favorite=self.request.user)
+
+
 class UsersProductsListView(LoginRequiredMixin, generic.ListView):
     model = Product
     template_name = 'catalog/users_products.html'
@@ -76,6 +94,24 @@ class UsersProductsListView(LoginRequiredMixin, generic.ListView):
 
     def get_queryset(self):
         return Product.objects.filter(who_added=self.request.user)
+
+
+class UsersDishesListView(LoginRequiredMixin, generic.ListView):
+    model = Dish
+    template_name = 'catalog/users_dishes.html'
+    paginate_by = 20
+
+    def get_queryset(self):
+        return Dish.objects.filter(who_added=self.request.user)
+
+
+class UsersKitchenUtensilsListView(LoginRequiredMixin, generic.ListView):
+    model = KitchenUtensil
+    template_name = 'catalog/users_kitchen_utensils.html'
+    paginate_by = 20
+
+    def get_queryset(self):
+        return KitchenUtensil.objects.filter(who_added=self.request.user)
 
 
 class UsersStoresListView(LoginRequiredMixin, generic.ListView):
@@ -97,20 +133,34 @@ class UsersPricesListView(LoginRequiredMixin, generic.ListView):
 
 
 @csrf_exempt
-def add_to_favorite(request, product_id):
+def add_product_to_favorite(request, product_id):
     for product in Product.objects.filter(id=product_id):
         product.favorite.add(request.user)
-    return HttpResponseRedirect(reverse('my-favorite'))
+    return HttpResponseRedirect(reverse('my-favorite-products'))
 
 
 @csrf_exempt
-def delete_from_favorite(request, product_id):
+def delete_product_from_favorite(request, product_id):
     for product in Product.objects.filter(id=product_id):
         product.favorite.remove(request.user)
-    return HttpResponseRedirect(reverse('my-favorite'))
+    return HttpResponseRedirect(reverse('my-favorite-products'))
 
 
-@permission_required('catalog.can_mark_returned')
+@csrf_exempt
+def add_dish_to_favorite(request, dish_id):
+    for dish in Dish.objects.filter(id=dish_id):
+        dish.favorite.add(request.user)
+    return HttpResponseRedirect(reverse('my-favorite-dishes'))
+
+
+@csrf_exempt
+def delete_dish_from_favorite(request, dish_id):
+    for dish in Dish.objects.filter(id=dish_id):
+        dish.favorite.remove(request.user)
+    return HttpResponseRedirect(reverse('my-favorite-dishes'))
+
+
+@login_required
 def renew_product(request, pk):
 
     product_inst = get_object_or_404(Product, pk=pk)
@@ -132,7 +182,7 @@ def renew_product(request, pk):
     return render(request, 'catalog/product_renew.html', {'form': form, 'product_inst': product_inst})
 
 
-@permission_required('catalog.can_mark_returned')
+@login_required
 def renew_store(request, pk):
 
     store_inst = get_object_or_404(Store, pk=pk)
@@ -156,7 +206,7 @@ def renew_store(request, pk):
     return render(request, 'catalog/store_renew.html', {'form': form, 'store_inst': store_inst})
 
 
-@permission_required('catalog.can_mark_returned')
+@login_required
 def renew_price(request, pk):
 
     price_inst = get_object_or_404(Price, pk=pk)
@@ -218,6 +268,25 @@ def create_dish(request):
         formset = product_amount_form_set()
 
     return render(request, 'catalog/dish_form.html', {'form': form, 'formset': formset})
+
+
+class DishDelete(DeleteView):
+    model = Dish
+    success_url = reverse_lazy('dishes')
+
+
+class KitchenUtensilCreate(CreateView):
+    model = KitchenUtensil
+    fields = ['name']
+
+    def form_valid(self, form):
+        form.instance.who_added = self.request.user
+        return super(KitchenUtensilCreate, self).form_valid(form)
+
+
+class KitchenUtensilDelete(DeleteView):
+    model = KitchenUtensil
+    success_url = reverse_lazy('kitchen_utensils')
 
 
 class ProductCreate(CreateView):

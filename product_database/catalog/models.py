@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 class Product(models.Model):
 
     name = models.CharField(max_length=200, help_text="Enter a product name")
-    favorite = models.ManyToManyField(User, blank=True, related_name='favorite_type')
+    favorite = models.ManyToManyField(User, blank=True, related_name='favorite_product_type')
     who_added = models.ForeignKey(User, on_delete=models.CASCADE, related_name='who_added_to_product_type')
 
     def __str__(self):
@@ -79,6 +79,9 @@ class KitchenUtensil(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('kitchen-utensil-detail', args=[str(self.id)])
+
 
 class Dish(models.Model):
 
@@ -87,6 +90,7 @@ class Dish(models.Model):
     kitchen_utensils = models.ManyToManyField('KitchenUtensil', blank=False)
     products = models.ManyToManyField('ProductAmount', blank=True)
     who_added = models.ForeignKey(User, on_delete=models.CASCADE, related_name='who_added_to_dish_type', null=True)
+    favorite = models.ManyToManyField(User, blank=True, related_name='favorite_dish_type')
 
     def __str__(self):
         return self.name

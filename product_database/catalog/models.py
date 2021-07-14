@@ -80,7 +80,7 @@ class KitchenUtensil(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('kitchen-utensil-detail', args=[str(self.id)])
+        return reverse('kitchen_utensil_detail', args=[str(self.id)])
 
 
 class Dish(models.Model):

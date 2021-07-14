@@ -1,0 +1,15 @@
+{% extends "base_generic.html" %}
+{% block content %}
+
+    <h1>Kitchen utensil renew</h1>
+    <p>Name: {{kitchen_utensil_inst.name}}</p>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <table>
+        {{ form }}
+        </table>
+        <input type="submit" value="Submit" />
+    </form>
+
+{% endblock %}

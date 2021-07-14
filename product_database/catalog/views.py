@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.views.generic.edit import CreateView, DeleteView
 from django.urls import reverse_lazy
-from .forms import RenewProductForm, RenewStoreForm, RenewPriceForm, ProductAmountForm, AddDishForm
+from .forms import RenewProductForm, RenewStoreForm, RenewPriceForm, ProductAmountForm, AddDishForm, RenewDishForm, RenewKitchenUtensilForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.formsets import formset_factory
@@ -236,7 +236,7 @@ def create_dish(request):
 
     if request.method == 'POST':
         form = AddDishForm(request.POST)
-        formset = product_amount_form_set(request.POST, prefix='product_amount')
+        formset = product_amount_form_set(request.POST)
         print(formset.is_valid())
         if form.is_valid() and formset.is_valid():
 
@@ -270,6 +270,49 @@ def create_dish(request):
     return render(request, 'catalog/dish_form.html', {'form': form, 'formset': formset})
 
 
+@login_required
+def renew_dish(request, pk):
+
+    product_amount_form_set = formset_factory(ProductAmountForm)
+    dish_inst = get_object_or_404(Dish, pk=pk)
+
+    if request.method == 'POST':
+
+        form = RenewDishForm(request.POST)
+        formset = product_amount_form_set(request.POST)
+
+        if form.is_valid() and formset.is_valid():
+            dish_inst.name = form.cleaned_data['name']
+            dish_inst.recipe = form.cleaned_data['recipe']
+            kitchen_utensils = []
+            for kitchen_utensil in form.cleaned_data['kitchen_utensils']:
+                kitchen_utensils.append(KitchenUtensil.objects.get(id=kitchen_utensil.id))
+            dish_inst.save()
+            for product_amount in dish_inst.products:
+                product_amount.delete()
+
+            products_amount = []
+            for f in formset:
+                product_amount = ProductAmount()
+                product_amount.product = f.cleaned_data['product']
+                product_amount.amount = f.cleaned_data['amount']
+                product_amount.unit = f.cleaned_data['unit']
+                product_amount.related_model = dish_inst
+                product_amount.save()
+                products_amount.append(ProductAmount.objects.get(id=product_amount.id))
+
+            dish_inst.products.add(*products_amount)
+            dish_inst.kitchen_utensils.add(*kitchen_utensils)
+
+            return HttpResponseRedirect(f'{dish_inst.get_absolute_url()}')
+
+    else:
+        form = AddDishForm()
+        formset = product_amount_form_set()
+
+    return render(request, 'catalog/dish_renew.html', {'form': form, 'formset': formset, 'dish_inst': dish_inst})
+
+
 class DishDelete(DeleteView):
     model = Dish
     success_url = reverse_lazy('dishes')
@@ -287,6 +330,29 @@ class KitchenUtensilCreate(CreateView):
 class KitchenUtensilDelete(DeleteView):
     model = KitchenUtensil
     success_url = reverse_lazy('kitchen_utensils')
+
+
+@login_required
+def renew_kitchen_utensil(request, pk):
+
+    kitchen_utensil_inst = get_object_or_404(KitchenUtensil, pk=pk)
+
+    if request.method == 'POST':
+
+        form = RenewKitchenUtensilForm(request.POST)
+
+        if form.is_valid():
+            kitchen_utensil_inst.price = form.cleaned_data['price']
+            kitchen_utensil_inst.save()
+
+            return HttpResponseRedirect(reverse('kitchen_utensils') )
+
+    else:
+        proposed_kitchen_utensil = KitchenUtensil.objects.filter(id=pk)
+
+        form = RenewKitchenUtensilForm(initial={'kitchenutensil': proposed_kitchen_utensil})
+
+    return render(request, 'catalog/kitchenutensil_renew.html', {'form': form, 'kitchen_utensil_inst': kitchen_utensil_inst})
 
 
 class ProductCreate(CreateView):

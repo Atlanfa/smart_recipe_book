@@ -1,0 +1,12 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Kitchen utensil name: {{ kitchenutensil.name }}</h1>
+
+  <div style="margin-left:20px;margin-top:20px">
+    <h2>Dishes with this kitchen utensil</h2>
+    {% for dish in kitchenutensil.dish_set.all %}
+    <p><strong>Dish name:</strong><a href="{{ dish.get_absolut_url }}">{{ dish.name }}</a> </p>
+    {% endfor %}
+  </div>
+{% endblock %}

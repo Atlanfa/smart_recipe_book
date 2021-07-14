@@ -25,11 +25,13 @@
                 <li><a href="{% url 'stores' %}">All stores</a></li>
                 <li><a href="{% url 'prices' %}">All prices</a></li>
                 <li><a href="{% url 'dishes' %}">All dishes</a></li>
+                <li><a href="{% url 'kitchen_utensils' %}">All kitchen utensils</a></li>
                 {% if user.is_authenticated %}
+                <br>
                     <li>User: {{ user.get_username }}</li>
                 <br>
                     <li><a href="{% url 'my-favorite-products' %}">My Favorite products</a> </li>
-                    <li><a href="#">My Favorite dishes</a> </li>
+                    <li><a href="{% url 'my-favorite-dishes' %}">My Favorite dishes</a> </li>
                     <br>
                     <li><a href="{% url 'product_create' %}">Create product</a> </li>
                     <li><a href="{% url 'store_create' %}">Create store</a> </li>
@@ -40,10 +42,10 @@
                     <li><a href="{% url 'my-prices' %}">My prices</a></li>
                     <br>
                     <li><a href="{% url 'dish_create' %}">Create dish</a></li>
-                    <li><a href="#">Create kitchen utensil</a></li>
+                    <li><a href="{% url 'kitchen_utensil_create' %}">Create kitchen utensil</a></li>
                     <br>
-                    <li><a href="#">My dishes</a> </li>
-                    <li><a href="#">My kitchen utensils</a> </li>
+                    <li><a href="{% url 'my-dishes' %}">My dishes</a> </li>
+                    <li><a href="{% url 'my-kitchen-utensils' %}">My kitchen utensils</a> </li>
                     <br>
                     <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
 

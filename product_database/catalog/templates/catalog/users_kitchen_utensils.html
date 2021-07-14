@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+    <h1>My kitchen utensils List</h1>
+
+    {% if kitchenutensil_list %}
+    <ul>
+
+      {% for kitchenutensil in kitchenutensil_list %}
+      <li>
+        <a href="{{ kitchenutensil.get_absolute_url }}">{{ kitchenutensil.name }}</a>
+        {% if user.is_authenticated %}- <a href="{% url 'renew-kitchen-utensil' kitchenutensil.id %}">Renew</a> - <a href="{% url 'kitchen_utensil_delete' kitchenutensil.id %}">Delete</a>  {% endif %}
+
+      </li>
+      {% endfor %}
+
+    </ul>
+    {% else %}
+      <p>There are no products in the database which was added by you.</p>
+    {% endif %}
+{% endblock %}

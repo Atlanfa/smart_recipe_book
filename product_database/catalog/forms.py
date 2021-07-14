@@ -59,4 +59,3 @@ class RenewDishForm(forms.Form):
     name = forms.CharField(max_length=200)
     recipe = forms.CharField(max_length=10000)
     kitchen_utensils = forms.ModelChoiceField(queryset=KitchenUtensil.objects.all())
-    products = forms.ModelChoiceField(queryset=ProductAmount.objects.all())

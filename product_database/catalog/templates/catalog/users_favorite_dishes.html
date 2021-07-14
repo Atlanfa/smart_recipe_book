@@ -3,13 +3,13 @@
 {% block content %}
     <h1>Favorite products</h1>
 
-    {% if product_list %}
+    {% if dish_list %}
     <ul>
 
-      {% for product in product_list %}
+      {% for dish in dish_list %}
       <li>
-        <a href="{{product.get_absolute_url}}">{{product.name}}</a>
-        - <a href="{% url 'delete_product_from_favorite' product.id %}">Delete from favorite</a>
+        <a href="{{dish.get_absolute_url}}">{{dish.name}}</a>
+        - <a href="{% url 'delete_dish_from_favorite' dish.id %}">Delete from favorite</a>
       </li>
       {% endfor %}
     </ul>

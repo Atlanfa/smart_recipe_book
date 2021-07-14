@@ -1,0 +1,47 @@
+{% extends "base_generic.html" %}
+{% block content %}
+
+    <h1>Dish renew</h1>
+    <h1>Dish name: {{ dish.name }}</h1>
+
+  <h2>Products needed:</h2>
+  <div style="margin-left:20px;margin-top:20px">
+      {% for product in dish.products.all %}
+      <p><a href="{{ product.product.get_absolute_url }}">{{ product.product.name }}</a> {{ product.amount }} {{ product.unit }}</p>
+      {% endfor %}
+  </div>
+
+  <h2>Kitchen utensils:</h2>
+  <div style="margin-left:20px;margin-top:20px">
+      {% for kitchen_utensil in dish.kitchen_utensils.all %}
+      <p>{{ kitchen_utensil.name }}</p>
+      {% endfor %}
+  </div>
+
+
+  <h2>Recipe :</h2>
+  <div style="margin-left:20px;margin-top:20px">
+      {{ dish.recipe }}
+  </div>
+
+    <form id="myForm" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <table>
+            <tbody>
+                {% for form in formset.forms %}
+
+                    <tr id="{{ form.prefix }}-row">
+                        <td>{{ form.as_p }}</td>
+                    </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {{ formset.management_form }}
+        <input type="submit" value="Submit" />
+    </form>
+
+{% endblock %}

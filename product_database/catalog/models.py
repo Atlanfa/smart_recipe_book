@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
 from .choices import CPAS, UNITS, SEXES
+from location_field.models.base import BaseLocationField
 
 
 class Profile(models.Model):
@@ -15,6 +16,9 @@ class Profile(models.Model):
     nursing = models.BooleanField(blank=True, null=True)
     kid_date_of_birth = models.DateField(blank=True, null=True)
     cpa = models.CharField(max_length=3, choices=CPAS, default='i')
+    city = models.CharField(max_length=255)
+    country = models.CharField(max_length=255)
+    location = BaseLocationField(based_fields=['country', 'city'], zoom=7)
 
 
 class Product(models.Model):

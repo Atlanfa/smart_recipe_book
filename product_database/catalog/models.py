@@ -3,6 +3,18 @@ from django.db import models
 # Create your models here.
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.conf import settings
+from .choices import CPAS, UNITS, SEXES
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    date_of_birth = models.DateField(blank=True, null=True)
+    sex = models.CharField(max_length=1, choices=SEXES, default='m')
+    weight = models.FloatField()
+    nursing = models.BooleanField(blank=True, null=True)
+    kid_date_of_birth = models.DateField(blank=True, null=True)
+    cpa = models.CharField(max_length=3, choices=CPAS, default='i')
 
 
 class Product(models.Model):
@@ -83,15 +95,6 @@ class Price(models.Model):
 
     def __str__(self):
         return self.product.name
-
-
-UNITS = (
-        ('kg', 'Kilogram'),
-        ('g', 'Gram'),
-        ('l', 'Liter'),
-        ('ml', 'Milliliter'),
-        ('thing', 'Thing')
-    )
 
 
 class ProductAmount(models.Model):

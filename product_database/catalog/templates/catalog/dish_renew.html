@@ -1,39 +1,53 @@
 {% extends "base_generic.html" %}
 {% block content %}
+{% load static %}
+<script src="{% static 'js/jquery-1.3.2.min.js' %}"></script>
+<script src="{% static 'js/jquery.formset.js' %}"></script>
+<script type="text/javascript">
+    $(function() {
+        $('#myForm tbody tr').formset({
+            prefix: '{{ formset.prefix }}'
+        });
+    })
+</script>
 
-    <h1>Dish renew</h1>
-    <h1>Dish name: {{ dish.name }}</h1>
+
+    <h1>Dish name: {{ dish_inst.name }}</h1>
 
   <h2>Products needed:</h2>
   <div style="margin-left:20px;margin-top:20px">
-      {% for product in dish.products.all %}
+      {% for product in dish_inst.products.all %}
       <p><a href="{{ product.product.get_absolute_url }}">{{ product.product.name }}</a> {{ product.amount }} {{ product.unit }}</p>
       {% endfor %}
   </div>
 
   <h2>Kitchen utensils:</h2>
   <div style="margin-left:20px;margin-top:20px">
-      {% for kitchen_utensil in dish.kitchen_utensils.all %}
-      <p>{{ kitchen_utensil.name }}</p>
+      {% for kitchen_utensil in dish_inst.kitchen_utensils.all %}
+      <p><a href="{{ kitchen_utensil.get_absolute_url }}">{{ kitchen_utensil.name }}</a></p>
       {% endfor %}
   </div>
 
 
   <h2>Recipe :</h2>
   <div style="margin-left:20px;margin-top:20px">
-      {{ dish.recipe }}
+      {{ dish_inst.recipe }}
   </div>
 
+
+<h1>Dish renew</h1>
     <form id="myForm" method="post">
         {% csrf_token %}
         {{ form.as_p }}
-
+        <br>
+        <h3>Add products</h3>
+        <br>
         <table>
             <tbody>
                 {% for form in formset.forms %}
 
                     <tr id="{{ form.prefix }}-row">
-                        <td>{{ form.as_p }}</td>
+                        <td style="border-bottom: 1px solid #000">{{ form.as_p }}</td>
                     </tr>
 
                 {% endfor %}

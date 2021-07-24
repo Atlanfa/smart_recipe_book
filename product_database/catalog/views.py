@@ -232,7 +232,7 @@ def renew_price(request, pk):
 @login_required
 def create_dish(request):
 
-    product_amount_form_set = formset_factory(ProductAmountForm)
+    product_amount_form_set = formset_factory(ProductAmountForm, min_num=1)
 
     if request.method == 'POST':
         form = AddDishForm(request.POST)
@@ -273,7 +273,7 @@ def create_dish(request):
 @login_required
 def renew_dish(request, pk):
 
-    product_amount_form_set = formset_factory(ProductAmountForm)
+    product_amount_form_set = formset_factory(ProductAmountForm, min_num=1)
     dish_inst = get_object_or_404(Dish, pk=pk)
 
     if request.method == 'POST':

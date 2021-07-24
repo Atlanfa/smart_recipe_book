@@ -15,14 +15,18 @@
     <form id="myForm" method="post">
         {% csrf_token %}
         {{ form.as_p }}
-
+        <br>
+        <p><h3>Add products</h3></p>
+        <br>
         <table>
             <tbody>
                 {% for form in formset.forms %}
 
                     <tr id="{{ form.prefix }}-row">
-                        <td>{{ form.as_p }}</td>
+                        <td style="border-bottom: 1px solid #000">{{ form.as_p }}</td>
+
                     </tr>
+
 
                 {% endfor %}
             </tbody>

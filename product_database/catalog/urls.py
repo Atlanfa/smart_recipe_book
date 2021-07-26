@@ -4,6 +4,7 @@ from django.conf.urls import url
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
+    url(r'^register/$', views.register, name='register'),
     path('addproducttofavorite/<int:product_id>', views.add_product_to_favorite, name='add_product_to_favorite'),
     path('deleteproductfromfavorite/<int:product_id>', views.delete_product_from_favorite, name='delete_product_from_favorite'),
     path('adddishtofavorite/<int:dish_id>', views.add_dish_to_favorite, name='add_dish_to_favorite'),

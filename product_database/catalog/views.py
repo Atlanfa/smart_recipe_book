@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Product, Price, Store, Dish, ProductAmount, KitchenUtensil
+from .models import Product, Price, Store, Dish, ProductAmount, KitchenUtensil, Profile
 from django.views import generic
 from django.contrib.auth.decorators import permission_required, login_required
 from django.shortcuts import get_object_or_404
@@ -11,8 +11,39 @@ from .forms import RenewProductForm, RenewStoreForm, RenewPriceForm, ProductAmou
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.formsets import formset_factory
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm
 # Create your views here.
+
+
+@login_required
+def edit_profile(request, pk):
+
+    profile_inst = get_object_or_404(Profile, pk=pk)
+
+    if request.method == 'POST':
+        user_form = UserEditForm(instance=request.user, data=request.POST)
+        profile_form = ProfileEditForm(data=request.POST, files=request.FILES)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_inst.date_of_birth = profile_form.cleaned_data['date_of_birth']
+            profile_inst.sex = profile_form.cleaned_data['sex']
+            profile_inst.weight = profile_form.cleaned_data['weight']
+            profile_inst.nursing = profile_form.cleaned_data['nursing']
+            profile_inst.kid_date_of_birth = profile_form.cleaned_data['kid_date_of_birth']
+            profile_inst.cpa = profile_form.cleaned_data['cpa']
+            profile_inst.city = profile_form.cleaned_data['city']
+            profile_inst.country = profile_form.cleaned_data['country']
+            profile_inst.location = profile_form.cleaned_data['location']
+            profile_inst.save()
+    else:
+        user_form = UserEditForm(instance=request.user)
+        proposed_profile = Profile.objects.filter(id=pk)
+
+        profile_form = ProfileEditForm(initial={'profile': proposed_profile})
+        return render(request,
+                      'catalog/edit.html',
+                      {'user_form': user_form,
+                       'profile_form': profile_form})
 
 
 def register(request):
@@ -25,6 +56,7 @@ def register(request):
             new_user.set_password(user_form.cleaned_data['password'])
             # Save the User object
             new_user.save()
+            profile = Profile.objects.create(user=new_user)
             return render(request, 'catalog/register_done.html', {'new_user': new_user})
     else:
         user_form = UserRegistrationForm()
@@ -216,9 +248,7 @@ def renew_store(request, pk):
             return HttpResponseRedirect(reverse('stores') )
 
     else:
-        proposed_store_name = 'Store name'
-        proposed_store_location = "Store location"
-        form = RenewStoreForm(initial={'name': proposed_store_name, 'location': proposed_store_location})
+        form = RenewStoreForm()
 
     return render(request, 'catalog/store_renew.html', {'form': form, 'store_inst': store_inst})
 

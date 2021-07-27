@@ -1,6 +1,8 @@
 from django import forms
-from .models import Store, Product, UNITS, KitchenUtensil, ProductAmount, Profile
+from .models import Store, Product, KitchenUtensil
 from django.contrib.auth.models import User
+from location_field.models.plain import PlainLocationField
+from .choices import SEXES, CPAS, UNITS, BIRTH_YEAR_CHOICES
 
 
 class UserEditForm(forms.ModelForm):
@@ -9,10 +11,16 @@ class UserEditForm(forms.ModelForm):
         fields = ('first_name', 'email')
 
 
-class ProfileEditForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = ('date_of_birth', 'sex', 'weight', 'nursing', 'kid_date_of_birth', 'cpa', 'location')
+class ProfileEditForm(forms.Form):
+    date_of_birth = forms.DateField(widget=forms.SelectDateWidget(years=BIRTH_YEAR_CHOICES))
+    sex = forms.ChoiceField(choices=SEXES)
+    weight = forms.FloatField()
+    nursing = forms.BooleanField()
+    kid_date_of_birth = forms.DateField(widget=forms.SelectDateWidget(years=BIRTH_YEAR_CHOICES))
+    cpa = forms.ChoiceField(choices=CPAS)
+    city = forms.CharField(max_length=255)
+    country = forms.CharField(max_length=255)
+    location = PlainLocationField(based_fields=['country', 'city'], zoom=7)
 
 
 class UserRegistrationForm(forms.ModelForm):
@@ -54,7 +62,10 @@ class RenewProductForm(forms.Form):
 
 class RenewStoreForm(forms.Form):
     name = forms.CharField(max_length=50, help_text="Enter a store name")
-    location = forms.CharField(max_length=100, help_text="Enter store location")
+    street = forms.CharField(max_length=255)
+    city = forms.CharField(max_length=255)
+    country = forms.CharField(max_length=255)
+    location = PlainLocationField(based_fields=['country', 'city', 'street'], zoom=7)
 
 
 class RenewPriceForm(forms.Form):

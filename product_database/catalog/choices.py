@@ -1,3 +1,5 @@
+from datetime import date
+
 UNITS = (
         ('kg', 'Kilogram'),
         ('g', 'Gram'),
@@ -20,3 +22,5 @@ CPAS = (
     ('iv', 'workers of hard physical labor, high physical activity'),
     ('v', 'workers of especially heavy physical work, very high physical activity')
 )
+
+BIRTH_YEAR_CHOICES = [year for year in range(1900, (date.today().year + 1))]

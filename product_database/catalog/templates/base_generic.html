@@ -29,6 +29,7 @@
                 {% if user.is_authenticated %}
                 <br>
                     <li>User: {{ user.get_username }}</li>
+                    <li><a href="{% url 'edit' user.profile.id %}">Edit profile</a> </li>
                 <br>
                     <li><a href="{% url 'my-favorite-products' %}">My Favorite products</a> </li>
                     <li><a href="{% url 'my-favorite-dishes' %}">My Favorite dishes</a> </li>

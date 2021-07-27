@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Place, Store, Price, ProductAmount, KitchenUtensil, Dish, Profile
+from .models import Product, Store, Price, ProductAmount, KitchenUtensil, Dish, Profile
 # Register your models here.
 
 # admin.site.register(Product)
@@ -8,16 +8,11 @@ from .models import Product, Place, Store, Price, ProductAmount, KitchenUtensil,
 # admin.site.register(ProductAmount)
 # admin.site.register(KitchenUtensil)
 # admin.site.register(Dish)
-admin.site.register(Place)
-
-
-class PlaceInline(admin.TabularInline):
-    model = Place
 
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('date_of_birth', 'sex', 'weight', 'nursing', 'kid_date_of_birth', 'cpa', 'location')
+    list_display = ('date_of_birth', 'sex', 'weight', 'nursing', 'kid_date_of_birth', 'cpa', 'country', 'city', 'location')
 
 
 class PriceInline(admin.TabularInline):
@@ -42,7 +37,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Store)
 class StoreAdmin(admin.ModelAdmin):
-    list_display = ('name', 'location')
+    list_display = ('name', 'country', 'city', 'street', 'location')
 
 
 @admin.register(ProductAmount)

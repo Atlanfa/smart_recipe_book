@@ -8,23 +8,20 @@ from .choices import CPAS, UNITS, SEXES
 from location_field.models.plain import PlainLocationField
 
 
-class Place(models.Model):
+class Profile(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    date_of_birth = models.DateField(blank=True, null=True)
+    sex = models.CharField(max_length=1, choices=SEXES, default='m')
+    weight = models.FloatField(null=True)
+    nursing = models.BooleanField(blank=True, null=True)
+    kid_date_of_birth = models.DateField(blank=True, null=True)
+    cpa = models.CharField(max_length=3, choices=CPAS, default='i')
     city = models.CharField(max_length=255, null=True)
     country = models.CharField(max_length=255, null=True)
     location = PlainLocationField(based_fields=['country', 'city'], zoom=7, null=True)
 
 
-class Profile(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    date_of_birth = models.DateField(blank=True, null=True)
-    sex = models.CharField(max_length=1, choices=SEXES, default='m')
-    weight = models.FloatField()
-    nursing = models.BooleanField(blank=True, null=True)
-    kid_date_of_birth = models.DateField(blank=True, null=True)
-    cpa = models.CharField(max_length=3, choices=CPAS, default='i')
-    location = models.ForeignKey(Place, on_delete=models.CASCADE, null=True)
-
-    def __str__(self):
+def __str__(self):
         return 'Profile for user {}'.format(self.user.username)
 
 
@@ -84,7 +81,10 @@ class Product(models.Model):
 class Store(models.Model):
 
     name = models.CharField(max_length=50, help_text="Enter a store name")
-    location = models.CharField(max_length=100, help_text="Enter store location")
+    street = models.CharField(max_length=255, null=True)
+    city = models.CharField(max_length=255, null=True)
+    country = models.CharField(max_length=255, null=True)
+    location = PlainLocationField(based_fields=['country', 'city', 'street'], zoom=7, null=True)
     who_added = models.ForeignKey(User, on_delete=models.CASCADE, related_name='who_added_to_store_type')
 
     def __str__(self):

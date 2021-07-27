@@ -1,8 +1,9 @@
 from django import forms
-from .models import Store, Product, KitchenUtensil
+from .models import Store, Product, KitchenUtensil, Profile
 from django.contrib.auth.models import User
 from location_field.models.plain import PlainLocationField
 from .choices import SEXES, CPAS, UNITS, BIRTH_YEAR_CHOICES
+from datetime import date
 
 
 class UserEditForm(forms.ModelForm):
@@ -11,16 +12,23 @@ class UserEditForm(forms.ModelForm):
         fields = ('first_name', 'email')
 
 
-class ProfileEditForm(forms.Form):
+class ProfileEditForm(forms.ModelForm):
     date_of_birth = forms.DateField(widget=forms.SelectDateWidget(years=BIRTH_YEAR_CHOICES))
-    sex = forms.ChoiceField(choices=SEXES)
-    weight = forms.FloatField()
-    nursing = forms.BooleanField()
     kid_date_of_birth = forms.DateField(widget=forms.SelectDateWidget(years=BIRTH_YEAR_CHOICES))
-    cpa = forms.ChoiceField(choices=CPAS)
-    city = forms.CharField(max_length=255)
-    country = forms.CharField(max_length=255)
-    location = PlainLocationField(based_fields=['country', 'city'], zoom=7)
+
+    class Meta:
+        model = Profile
+        fields = ('sex', 'weight', 'nursing', 'cpa', 'city', 'country', 'location')
+
+    def clean_date_of_birth(self):
+        cd = self.cleaned_data
+        if cd['date_of_birth'] > date.today():
+            raise forms.ValidationError('Date of birth is greater then today')
+
+    def clean_kid_date_of_birth(self):
+        cd = self.cleaned_data
+        if cd['kid_date_of_birth'] > date.today():
+            raise forms.ValidationError('Date of birth is greater then today')
 
 
 class UserRegistrationForm(forms.ModelForm):

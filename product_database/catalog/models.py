@@ -14,7 +14,6 @@ class Profile(models.Model):
     sex = models.CharField(max_length=1, choices=SEXES, default='m')
     weight = models.FloatField(null=True)
     nursing = models.BooleanField(blank=True, null=True)
-    kid_date_of_birth = models.DateField(blank=True, null=True)
     cpa = models.CharField(max_length=3, choices=CPAS, default='i')
     city = models.CharField(max_length=255, null=True)
     country = models.CharField(max_length=255, null=True)

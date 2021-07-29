@@ -12,7 +12,7 @@ from .models import Product, Store, Price, ProductAmount, KitchenUtensil, Dish, 
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('date_of_birth', 'sex', 'weight', 'nursing', 'kid_date_of_birth', 'cpa', 'country', 'city', 'location')
+    list_display = ('date_of_birth', 'sex', 'weight', 'nursing', 'cpa', 'country', 'city', 'location')
 
 
 class PriceInline(admin.TabularInline):

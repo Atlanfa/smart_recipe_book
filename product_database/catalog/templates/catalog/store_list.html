@@ -8,7 +8,7 @@
 
       {% for store in store_list %}
       <li>
-        <a href="{{ store.get_absolute_url }}">{{ store.name }} {{ store.location }}</a>
+        <a href="{{ store.get_absolute_url }}">{{ store.name }} {{ store.country }} {{ store.city }} {{ store.street }}</a>
       </li>
       {% endfor %}
 

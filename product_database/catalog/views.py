@@ -244,6 +244,9 @@ def renew_store(request, pk):
 
         if form.is_valid():
             store_inst.name = form.cleaned_data['name']
+            store_inst.country = form.cleaned_data['country']
+            store_inst.city = form.cleaned_data['city']
+            store_inst.street = form.cleaned_data['street']
             store_inst.location = form.cleaned_data['location']
             store_inst.save()
 
@@ -406,7 +409,7 @@ def renew_kitchen_utensil(request, pk):
 
 class ProductCreate(CreateView):
     model = Product
-    fields = ['name']
+    fields = [field.name for field in Product._meta.fields if not field.name == 'favorite' and not field.name == 'who_added']
 
     def form_valid(self, form):
         form.instance.who_added = self.request.user
@@ -420,7 +423,7 @@ class ProductDelete(DeleteView):
 
 class StoreCreate(CreateView):
     model = Store
-    fields = ['name', 'location']
+    fields = ['name', 'country', 'city', 'street', 'location']
 
     def form_valid(self, form):
         form.instance.who_added = self.request.user

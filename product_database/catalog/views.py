@@ -35,15 +35,13 @@ def edit_profile(request, pk):
             profile_inst.country = profile_form.cleaned_data['country']
             profile_inst.location = profile_form.cleaned_data['location']
             profile_inst.save()
+            return HttpResponseRedirect()
     else:
         user_form = UserEditForm(instance=request.user)
         proposed_profile = Profile.objects.filter(id=pk)
 
         profile_form = ProfileEditForm(initial={'profile': proposed_profile})
-        return render(request,
-                      'catalog/edit.html',
-                      {'user_form': user_form,
-                       'profile_form': profile_form})
+    return render(request, 'catalog/edit.html', {'user_form': user_form, 'profile_form': profile_form})
 
 
 def register(request):
@@ -100,6 +98,10 @@ class DishListView(generic.ListView):
 class KitchenUtensilListView(generic.ListView):
     model = KitchenUtensil
     paginate_by = 20
+
+
+class ProfileDetailView(generic.DetailView):
+    model = Profile
 
 
 class KitchenUtensilDetailView(generic.DetailView):

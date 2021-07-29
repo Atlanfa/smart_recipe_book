@@ -20,8 +20,7 @@ class Profile(models.Model):
     country = models.CharField(max_length=255, null=True)
     location = PlainLocationField(based_fields=['country', 'city'], zoom=7, null=True)
 
-
-def __str__(self):
+    def __str__(self):
         return 'Profile for user {}'.format(self.user.username)
 
 
@@ -35,7 +34,7 @@ class Product(models.Model):
     fat_in_100_g = models.FloatField()
     fat_in_100_g_including_animals = models.FloatField()
     digestible_carbohydrates_in_100_g = models.FloatField()
-    digestible_carbohydrates_in_100_g_including_mono_and_disaccharides = models.FloatField()
+    digestible_carbohydrates_in_100_g_incl_m_and_d = models.FloatField()
     dietary_fiber_in_100_g = models.FloatField()
     dietary_fiber_in_100_g_including_fiber_and_pectin = models.FloatField()
     polyunsaturated_acid = models.FloatField()
@@ -112,7 +111,7 @@ class ProductAmount(models.Model):
 
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=3)
-    unit = models.CharField(max_length=10, choices=UNITS, default='k', help_text='Choose unit')
+    unit = models.CharField(max_length=10, choices=UNITS, default='kg', help_text='Choose unit')
     related_model = models.ForeignKey('Dish', on_delete=models.CASCADE)
 
     def __str__(self):
@@ -134,7 +133,7 @@ class KitchenUtensil(models.Model):
 class Dish(models.Model):
 
     name = models.CharField(max_length=200)
-    recipe = models.CharField(max_length=100000)
+    recipe = models.TextField()
     kitchen_utensils = models.ManyToManyField('KitchenUtensil', blank=False)
     products = models.ManyToManyField('ProductAmount', blank=True)
     who_added = models.ForeignKey(User, on_delete=models.CASCADE, related_name='who_added_to_dish_type', null=True)

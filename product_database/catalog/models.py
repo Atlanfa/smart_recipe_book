@@ -8,6 +8,54 @@ from .choices import CPAS, UNITS, SEXES
 from location_field.models.plain import PlainLocationField
 
 
+class BalancedNutritionFormula(models.Model):
+    country = models.CharField(max_length=255)
+    humans_attributes = models.ManyToManyField('HumanAttributes')
+    who_added = models.ForeignKey(User, on_delete=models.CASCADE, related_name='who_added_to_balanced_nutrition_formula_type')
+
+
+class HumanAttributes(models.Model):
+    age = models.DecimalField(max_digits=3, decimal_places=1)
+    sex = models.CharField(max_length=1, choices=SEXES, default='m')
+    weight = models.FloatField(null=True)
+    proteins_in_100_g = models.FloatField()
+    proteins_in_100_g_including_animals = models.FloatField()
+    fat_in_100_g = models.FloatField()
+    fat_in_100_g_including_animals = models.FloatField()
+    digestible_carbohydrates_in_100_g = models.FloatField()
+    digestible_carbohydrates_in_100_g_incl_m_and_d = models.FloatField()
+    dietary_fiber_in_100_g = models.FloatField()
+    dietary_fiber_in_100_g_including_fiber_and_pectin = models.FloatField()
+    polyunsaturated_acid = models.FloatField()
+    saturated_acid = models.FloatField()
+    monounsaturated_acid = models.FloatField()
+    calcium_in_100_g_in_mg = models.FloatField()
+    phosphorus_in_100_g_in_mg = models.FloatField()
+    magnesium_in_100_g_in_mg = models.FloatField()
+    potassium_in_100_g_in_mg = models.FloatField()
+    sodium_in_100_g_in_mg = models.FloatField()
+    chlorine_in_100_g_in_mg = models.FloatField()
+    sulfur_in_100_g_in_mg = models.FloatField()
+    iron_in_100_g_in_mg = models.FloatField()
+    zinc_in_100_g_in_mg = models.FloatField()
+    iodine_in_100_g_in_mg = models.FloatField()
+    fluorine_in_100_g_in_mg = models.FloatField()
+    thiamine_vitamin_B1_in_100_g_in_mg = models.FloatField()
+    riboflavin_vitamin_B2_in_100_g_in_mg = models.FloatField()
+    pyridoxine_vitamin_B6_in_100_g_in_mg = models.FloatField()
+    pantothenic_acid_vitamin_B3_in_100_g_in_mg = models.FloatField()
+    folacin_acid_vitamin_B9_in_100_g_in_mcg = models.FloatField()
+    cobalamin_acid_vitamin_B12_in_100_g_in_mcg = models.FloatField()
+    niacin_vitamin_PP_in_100_g_in_mg = models.FloatField()
+    ascorbic_acid_vitamin_C_in_100_g_in_mg = models.FloatField()
+    retinol_vitamin_A_in_100_g_in_mcg = models.FloatField()
+    tocopherol_vitamin_E_in_100_g_in_mg = models.FloatField()
+    cholecalciferol_vitamin_D_in_100_g_in_mcg = models.FloatField()
+    energy_value_in_kcal = models.FloatField()
+    who_added = models.ForeignKey(User, on_delete=models.CASCADE, related_name='who_added_to_human_attributes_type')
+    related_model = models.ForeignKey('BalancedNutritionFormula', on_delete=models.CASCADE)
+
+
 class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date_of_birth = models.DateField(blank=True, null=True)
@@ -15,8 +63,8 @@ class Profile(models.Model):
     weight = models.FloatField(null=True)
     nursing = models.BooleanField(blank=True, null=True)
     cpa = models.CharField(max_length=3, choices=CPAS, default='i')
-    city = models.CharField(max_length=255, null=True)
     country = models.CharField(max_length=255, null=True)
+    city = models.CharField(max_length=255, null=True)
     location = PlainLocationField(based_fields=['country', 'city'], zoom=7, null=True)
 
     def __str__(self):
@@ -79,9 +127,9 @@ class Product(models.Model):
 class Store(models.Model):
 
     name = models.CharField(max_length=50, help_text="Enter a store name")
-    street = models.CharField(max_length=255, null=True)
-    city = models.CharField(max_length=255, null=True)
     country = models.CharField(max_length=255, null=True)
+    city = models.CharField(max_length=255, null=True)
+    street = models.CharField(max_length=255, null=True)
     location = PlainLocationField(based_fields=['country', 'city', 'street'], zoom=7, null=True)
     who_added = models.ForeignKey(User, on_delete=models.CASCADE, related_name='who_added_to_store_type')
 

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Product, Price, Store, Dish, ProductAmount, KitchenUtensil, Profile
+from .models import Product, Price, Store, Dish, ProductAmount, KitchenUtensil, Profile, BalancedNutritionFormula, HumanAttributes
 from django.views import generic
 from django.contrib.auth.decorators import permission_required, login_required
 from django.shortcuts import get_object_or_404
@@ -7,11 +7,11 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.views.generic.edit import CreateView, DeleteView
 from django.urls import reverse_lazy
-from .forms import RenewProductForm, RenewStoreForm, RenewPriceForm, ProductAmountForm, AddDishForm, RenewDishForm, RenewKitchenUtensilForm
+from .forms import RenewProductForm, RenewStoreForm, RenewPriceForm, ProductAmountForm, DishForm, RenewKitchenUtensilForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.formsets import formset_factory
-from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm
+from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm, HumanAttributesForm
 # Create your views here.
 
 
@@ -211,6 +211,8 @@ def delete_dish_from_favorite(request, dish_id):
     return HttpResponseRedirect(reverse('my-favorite-dishes'))
 
 
+
+
 @login_required
 def renew_product(request, pk):
 
@@ -231,7 +233,6 @@ def renew_product(request, pk):
         form = RenewProductForm(initial={'name': proposed_product_name,})
 
     return render(request, 'catalog/product_renew.html', {'form': form, 'product_inst': product_inst})
-
 
 @login_required
 def renew_store(request, pk):
@@ -287,7 +288,7 @@ def create_dish(request):
     product_amount_form_set = formset_factory(ProductAmountForm, min_num=1)
 
     if request.method == 'POST':
-        form = AddDishForm(request.POST)
+        form = DishForm(request.POST)
         formset = product_amount_form_set(request.POST)
         print(formset.is_valid())
         if form.is_valid() and formset.is_valid():
@@ -316,10 +317,22 @@ def create_dish(request):
             return HttpResponseRedirect(f'{dish_inst.get_absolute_url()}')
 
     else:
-        form = AddDishForm()
+        form = DishForm()
         formset = product_amount_form_set()
 
     return render(request, 'catalog/dish_form.html', {'form': form, 'formset': formset})
+
+
+@login_required
+def renew_balanced_nutrition_formula(request, pk):
+
+    balanced_nutrition_formula_inst = get_object_or_404(BalancedNutritionFormula, pk=pk)
+    human_attributes_form_set = formset_factory(HumanAttributesForm)
+
+    if request.method == 'POST':
+        formset = human_attributes_form_set(request.POST)
+        if formset.is_valid():
+            pass
 
 
 @login_required
@@ -330,7 +343,7 @@ def renew_dish(request, pk):
 
     if request.method == 'POST':
 
-        form = RenewDishForm(request.POST)
+        form = DishForm(request.POST)
         formset = product_amount_form_set(request.POST)
 
         if form.is_valid() and formset.is_valid():
@@ -359,7 +372,7 @@ def renew_dish(request, pk):
             return HttpResponseRedirect(f'{dish_inst.get_absolute_url()}')
 
     else:
-        form = AddDishForm()
+        form = DishForm()
         formset = product_amount_form_set()
 
     return render(request, 'catalog/dish_renew.html', {'form': form, 'formset': formset, 'dish_inst': dish_inst})

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Store, Price, ProductAmount, KitchenUtensil, Dish, Profile
+from .models import Product, Store, Price, ProductAmount, KitchenUtensil, Dish, Profile, HumanAttributes, BalancedNutritionFormula
 # Register your models here.
 
 # admin.site.register(Product)
@@ -8,6 +8,27 @@ from .models import Product, Store, Price, ProductAmount, KitchenUtensil, Dish, 
 # admin.site.register(ProductAmount)
 # admin.site.register(KitchenUtensil)
 # admin.site.register(Dish)
+#from .regions import get_regions
+#from .data_dict import data
+#from .models import BalancedNutritionFormula
+
+#for country in get_regions(data):
+#    BalancedNutritionFormula.objects.create(country=country)
+
+
+@admin.register(HumanAttributes)
+class HumanAttributesAdmin(admin.ModelAdmin):
+    list_display = ('age', 'sex', 'weight', 'related_model')
+
+
+class HumanAttributesInline(admin.TabularInline):
+    model = HumanAttributes
+
+
+@admin.register(BalancedNutritionFormula)
+class BalancedNutritionFormulaAdmin(admin.ModelAdmin):
+    list_display = ('country',)
+    inlines = [HumanAttributesInline]
 
 
 @admin.register(Profile)

@@ -1,9 +1,20 @@
 from django import forms
-from .models import Store, Product, KitchenUtensil, Profile
+from .models import Store, Product, KitchenUtensil, Profile, HumanAttributes
 from django.contrib.auth.models import User
 from location_field.models.plain import PlainLocationField
 from .choices import SEXES, CPAS, UNITS, BIRTH_YEAR_CHOICES
 from datetime import date
+
+
+class HumanAttributesForm(forms.ModelForm):
+    class Meta:
+        model = HumanAttributes
+        fields = (field.name for field in HumanAttributes._meta.fields if not field.name == 'related_model' and not field.name == 'who_added')
+
+
+# if needed to change country name in BalancedNutritionFormula
+#class RenewBalancedNutritionFormula(forms.Form):
+#    country = forms.CharField(max_length=255)
 
 
 class UserEditForm(forms.ModelForm):
@@ -14,7 +25,6 @@ class UserEditForm(forms.ModelForm):
 
 class ProfileEditForm(forms.ModelForm):
     date_of_birth = forms.DateField(widget=forms.SelectDateWidget(years=BIRTH_YEAR_CHOICES))
-    kid_date_of_birth = forms.DateField(widget=forms.SelectDateWidget(years=BIRTH_YEAR_CHOICES))
 
     class Meta:
         model = Profile
@@ -23,11 +33,6 @@ class ProfileEditForm(forms.ModelForm):
     def clean_date_of_birth(self):
         cd = self.cleaned_data
         if cd['date_of_birth'] > date.today():
-            raise forms.ValidationError('Date of birth is greater then today')
-
-    def clean_kid_date_of_birth(self):
-        cd = self.cleaned_data
-        if cd['kid_date_of_birth'] > date.today():
             raise forms.ValidationError('Date of birth is greater then today')
 
 
@@ -95,13 +100,8 @@ class RenewKitchenUtensilForm(forms.Form):
     name = forms.CharField(max_length=100, help_text='Enter kitchen utensil name')
 
 
-class AddDishForm(forms.Form):
+class DishForm(forms.Form):
     name = forms.CharField(max_length=200)
     recipe = forms.CharField(max_length=10000)
     kitchen_utensils = forms.ModelMultipleChoiceField(queryset=KitchenUtensil.objects.all())
 
-
-class RenewDishForm(forms.Form):
-    name = forms.CharField(max_length=200)
-    recipe = forms.CharField(max_length=10000)
-    kitchen_utensils = forms.ModelChoiceField(queryset=KitchenUtensil.objects.all())

@@ -4,19 +4,21 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
-from .choices import CPAS, UNITS, SEXES
+from .choices import PAGS, UNITS, SEXES
 from location_field.models.plain import PlainLocationField
 
 
 class BalancedNutritionFormula(models.Model):
     country = models.CharField(max_length=255)
-    humans_attributes = models.ManyToManyField('HumanAttributes')
-    who_added = models.ForeignKey(User, on_delete=models.CASCADE, related_name='who_added_to_balanced_nutrition_formula_type')
+    humans_attributes = models.ManyToManyField('HumanAttributes', null=True)
+    #who_added = models.ForeignKey(User, on_delete=models.CASCADE, related_name='who_added_to_balanced_nutrition_formula_type')
 
 
 class HumanAttributes(models.Model):
-    age = models.DecimalField(max_digits=3, decimal_places=1)
+    age = models.CharField(max_length=10)
     sex = models.CharField(max_length=1, choices=SEXES, default='m')
+    pag = models.CharField(max_length=4, choices=PAGS, default='k')
+    cpa = models.FloatField(null=True)
     weight = models.FloatField(null=True)
     proteins_in_100_g = models.FloatField()
     proteins_in_100_g_including_animals = models.FloatField()
@@ -62,7 +64,7 @@ class Profile(models.Model):
     sex = models.CharField(max_length=1, choices=SEXES, default='m')
     weight = models.FloatField(null=True)
     nursing = models.BooleanField(blank=True, null=True)
-    cpa = models.CharField(max_length=3, choices=CPAS, default='i')
+    cpa = models.CharField(max_length=3, choices=PAGS, default='i')
     country = models.CharField(max_length=255, null=True)
     city = models.CharField(max_length=255, null=True)
     location = PlainLocationField(based_fields=['country', 'city'], zoom=7, null=True)

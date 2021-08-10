@@ -27,6 +27,7 @@
                 <li><a href="{% url 'prices' %}">All prices</a></li>
                 <li><a href="{% url 'dishes' %}">All dishes</a></li>
                 <li><a href="{% url 'kitchen_utensils' %}">All kitchen utensils</a></li>
+                <li><a href="{% url 'bnfs' %}">All countries BNF</a> </li>
                 {% if user.is_authenticated %}
                 <br>
                     <li>User: {{ user.get_username }}</li>

@@ -234,6 +234,7 @@ def renew_product(request, pk):
 
     return render(request, 'catalog/product_renew.html', {'form': form, 'product_inst': product_inst})
 
+
 @login_required
 def renew_store(request, pk):
 
@@ -323,16 +324,82 @@ def create_dish(request):
     return render(request, 'catalog/dish_form.html', {'form': form, 'formset': formset})
 
 
+class BalancedNutritionFormulaDetailView(generic.DetailView):
+    model = BalancedNutritionFormula
+
+
+class BalancedNutritionFormulaListView(generic.ListView):
+    model = BalancedNutritionFormula
+    paginate_by = 20
+    template_name = 'balancednutritionformula_list'
+
+
 @login_required
 def renew_balanced_nutrition_formula(request, pk):
 
+    human_attributes_form_set = formset_factory(HumanAttributesForm, min_num=1)
     balanced_nutrition_formula_inst = get_object_or_404(BalancedNutritionFormula, pk=pk)
-    human_attributes_form_set = formset_factory(HumanAttributesForm)
 
     if request.method == 'POST':
+        
         formset = human_attributes_form_set(request.POST)
+        
         if formset.is_valid():
-            pass
+            for human_attribute in balanced_nutrition_formula_inst.human_attributes:
+                human_attribute.delete()
+            human_attributes = []
+            for f in formset:
+                human_attribute = HumanAttributes()
+                human_attribute.age = f.cleaned_data['age']
+                human_attribute.sex = f.cleaned_data['sex']
+                human_attribute.pag = f.cleaned_data['pga']
+                human_attribute.cpa = f.cleaned_data['cpa']
+                human_attribute.weight = f.cleaned_data['weight']
+                human_attribute.proteins_in_100_g = f.cleaned_data['proteins_in_100_g']
+                human_attribute.proteins_in_100_g_including_animals = f.cleaned_data['proteins_in_100_g_including_animals']
+                human_attribute.fat_in_100_g = f.cleaned_data['fat_in_100_g']
+                human_attribute.fat_in_100_g_including_animals = f.cleaned_data['fat_in_100_g_including_animals']
+                human_attribute.digestible_carbohydrates_in_100_g = f.cleaned_data['digestible_carbohydrates_in_100_g']
+                human_attribute.digestible_carbohydrates_in_100_g_incl_m_and_d = f.cleaned_data['digestible_carbohydrates_in_100_g_incl_m_and_d']
+                human_attribute.dietary_fiber_in_100_g = f.cleaned_data['dietary_fiber_in_100_g']
+                human_attribute.dietary_fiber_in_100_g_including_fiber_and_pectin = f.cleaned_data['dietary_fiber_in_100_g_including_fiber_and_pectin']
+                human_attribute.polyunsaturated_acid = f.cleaned_data['polyunsaturated_acid']
+                human_attribute.saturated_acid = f.cleaned_data['saturated_acid']
+                human_attribute.monounsaturated_acid = f.cleaned_data['monounsaturated_acid']
+                human_attribute.calcium_in_100_g_in_mg = f.cleaned_data['calcium_in_100_g_in_mg']
+                human_attribute.phosphorus_in_100_g_in_mg = f.cleaned_data['phosphorus_in_100_g_in_mg']
+                human_attribute.magnesium_in_100_g_in_mg = f.cleaned_data['magnesium_in_100_g_in_mg']
+                human_attribute.potassium_in_100_g_in_mg = f.cleaned_data['potassium_in_100_g_in_mg']
+                human_attribute.sodium_in_100_g_in_mg = f.cleaned_data['sodium_in_100_g_in_mg']
+                human_attribute.chlorine_in_100_g_in_mg = f.cleaned_data['chlorine_in_100_g_in_mg']
+                human_attribute.sulfur_in_100_g_in_mg = f.cleaned_data['sulfur_in_100_g_in_mg']
+                human_attribute.iron_in_100_g_in_mg = f.cleaned_data['iron_in_100_g_in_mg']
+                human_attribute.zinc_in_100_g_in_mg = f.cleaned_data['zinc_in_100_g_in_mg']
+                human_attribute.iodine_in_100_g_in_mg = f.cleaned_data['iodine_in_100_g_in_mg']
+                human_attribute.fluorine_in_100_g_in_mg = f.cleaned_data['fluorine_in_100_g_in_mg']
+                human_attribute.thiamine_vitamin_B1_in_100_g_in_mg = f.cleaned_data['thiamine_vitamin_B1_in_100_g_in_mg']
+                human_attribute.riboflavin_vitamin_B2_in_100_g_in_mg = f.cleaned_data['riboflavin_vitamin_B2_in_100_g_in_mg']
+                human_attribute.pyridoxine_vitamin_B6_in_100_g_in_mg = f.cleaned_data['pyridoxine_vitamin_B6_in_100_g_in_mg']
+                human_attribute.pantothenic_acid_vitamin_B3_in_100_g_in_mg = f.cleaned_data['pantothenic_acid_vitamin_B3_in_100_g_in_mg']
+                human_attribute.folacin_acid_vitamin_B9_in_100_g_in_mcg = f.cleaned_data['folacin_acid_vitamin_B9_in_100_g_in_mcg']
+                human_attribute.cobalamin_acid_vitamin_B12_in_100_g_in_mcg = f.cleaned_data['cobalamin_acid_vitamin_B12_in_100_g_in_mcg']
+                human_attribute.niacin_vitamin_PP_in_100_g_in_mg = f.cleaned_data['niacin_vitamin_PP_in_100_g_in_mg']
+                human_attribute.ascorbic_acid_vitamin_C_in_100_g_in_mg = f.cleaned_data['ascorbic_acid_vitamin_C_in_100_g_in_mg']
+                human_attribute.retinol_vitamin_A_in_100_g_in_mcg = f.cleaned_data['retinol_vitamin_A_in_100_g_in_mcg']
+                human_attribute.tocopherol_vitamin_E_in_100_g_in_mg = f.cleaned_data['tocopherol_vitamin_E_in_100_g_in_mg']
+                human_attribute.cholecalciferol_vitamin_D_in_100_g_in_mcg = f.cleaned_data['cholecalciferol_vitamin_D_in_100_g_in_mcg']
+                human_attribute.energy_value_in_kcal = f.cleaned_data['energy_value_in_kcal']
+                human_attribute.related_model = balanced_nutrition_formula_inst
+                human_attribute.save()
+                human_attributes.append(human_attribute)
+
+            balanced_nutrition_formula_inst.add(*human_attributes)
+            return HttpResponseRedirect(f'{balanced_nutrition_formula_inst.get_absolut_url()}')
+
+    else:
+        formset = human_attributes_form_set()
+
+    return render(request, 'catalog/balancednutritionformula_renew.html', {'formset': formset, 'balanced_nutrition_formula_inst': balanced_nutrition_formula_inst})
 
 
 @login_required

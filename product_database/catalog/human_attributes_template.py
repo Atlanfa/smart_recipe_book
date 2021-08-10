@@ -1,6 +1,7 @@
 from choices import PAGS, KID_YEAR_LIST, WEIGHT, SEXES, YEAR_LIST
 from models import HumanAttributes
 
+
 def create_templates():
     attribute_list = []
     for year in KID_YEAR_LIST:

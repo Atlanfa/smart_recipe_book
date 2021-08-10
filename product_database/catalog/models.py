@@ -4,22 +4,28 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
-from .choices import PAGS, UNITS, SEXES
+from .choices import PAGS, UNITS, SEXES, ALL_YEARS
 from location_field.models.plain import PlainLocationField
 
 
 class BalancedNutritionFormula(models.Model):
     country = models.CharField(max_length=255)
-    humans_attributes = models.ManyToManyField('HumanAttributes', null=True)
+    humans_attributes = models.ManyToManyField('HumanAttributes', blank=True)
     #who_added = models.ForeignKey(User, on_delete=models.CASCADE, related_name='who_added_to_balanced_nutrition_formula_type')
+
+    def get_absolute_url(self):
+        """
+        Returns the url to access a particular instance of the model.
+        """
+        return reverse('bnf-detail', args=[str(self.id)])
 
 
 class HumanAttributes(models.Model):
-    age = models.CharField(max_length=10)
+    age = models.CharField(max_length=2, choices=ALL_YEARS, default='1')
     sex = models.CharField(max_length=1, choices=SEXES, default='m')
     pag = models.CharField(max_length=4, choices=PAGS, default='k')
-    cpa = models.FloatField(null=True)
-    weight = models.FloatField(null=True)
+    cpa = models.FloatField()
+    weight = models.FloatField()
     proteins_in_100_g = models.FloatField()
     proteins_in_100_g_including_animals = models.FloatField()
     fat_in_100_g = models.FloatField()
@@ -54,7 +60,7 @@ class HumanAttributes(models.Model):
     tocopherol_vitamin_E_in_100_g_in_mg = models.FloatField()
     cholecalciferol_vitamin_D_in_100_g_in_mcg = models.FloatField()
     energy_value_in_kcal = models.FloatField()
-    who_added = models.ForeignKey(User, on_delete=models.CASCADE, related_name='who_added_to_human_attributes_type')
+    #who_added = models.ForeignKey(User, on_delete=models.CASCADE, related_name='who_added_to_human_attributes_type')
     related_model = models.ForeignKey('BalancedNutritionFormula', on_delete=models.CASCADE)
 
 

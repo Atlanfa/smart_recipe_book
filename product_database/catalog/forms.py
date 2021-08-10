@@ -2,17 +2,53 @@ from django import forms
 from .models import Store, Product, KitchenUtensil, Profile, HumanAttributes
 from django.contrib.auth.models import User
 from location_field.models.plain import PlainLocationField
-from .choices import SEXES, CPAS, UNITS, BIRTH_YEAR_CHOICES
+from .choices import SEXES, PAGS, UNITS, BIRTH_YEAR_CHOICES, ALL_YEARS
 from datetime import date
 
 
-class HumanAttributesForm(forms.ModelForm):
-    class Meta:
-        model = HumanAttributes
-        fields = (field.name for field in HumanAttributes._meta.fields if not field.name == 'related_model' and not field.name == 'who_added')
+class HumanAttributesForm(forms.Form):
+    age = forms.ChoiceField(choices= ALL_YEARS)
+    sex = forms.ChoiceField(choices=SEXES)
+    pag = forms.ChoiceField(choices=PAGS)
+    cpa = forms.FloatField()
+    weight = forms.FloatField()
+    proteins_in_100_g = forms.FloatField()
+    proteins_in_100_g_including_animals = forms.FloatField()
+    fat_in_100_g = forms.FloatField()
+    fat_in_100_g_including_animals = forms.FloatField()
+    digestible_carbohydrates_in_100_g = forms.FloatField()
+    digestible_carbohydrates_in_100_g_incl_m_and_d = forms.FloatField()
+    dietary_fiber_in_100_g = forms.FloatField()
+    dietary_fiber_in_100_g_including_fiber_and_pectin = forms.FloatField()
+    polyunsaturated_acid = forms.FloatField()
+    saturated_acid = forms.FloatField()
+    monounsaturated_acid = forms.FloatField()
+    calcium_in_100_g_in_mg = forms.FloatField()
+    phosphorus_in_100_g_in_mg = forms.FloatField()
+    magnesium_in_100_g_in_mg = forms.FloatField()
+    potassium_in_100_g_in_mg = forms.FloatField()
+    sodium_in_100_g_in_mg = forms.FloatField()
+    chlorine_in_100_g_in_mg = forms.FloatField()
+    sulfur_in_100_g_in_mg = forms.FloatField()
+    iron_in_100_g_in_mg = forms.FloatField()
+    zinc_in_100_g_in_mg = forms.FloatField()
+    iodine_in_100_g_in_mg = forms.FloatField()
+    fluorine_in_100_g_in_mg = forms.FloatField()
+    thiamine_vitamin_B1_in_100_g_in_mg = forms.FloatField()
+    riboflavin_vitamin_B2_in_100_g_in_mg = forms.FloatField()
+    pyridoxine_vitamin_B6_in_100_g_in_mg = forms.FloatField()
+    pantothenic_acid_vitamin_B3_in_100_g_in_mg = forms.FloatField()
+    folacin_acid_vitamin_B9_in_100_g_in_mcg = forms.FloatField()
+    cobalamin_acid_vitamin_B12_in_100_g_in_mcg = forms.FloatField()
+    niacin_vitamin_PP_in_100_g_in_mg = forms.FloatField()
+    ascorbic_acid_vitamin_C_in_100_g_in_mg = forms.FloatField()
+    retinol_vitamin_A_in_100_g_in_mcg = forms.FloatField()
+    tocopherol_vitamin_E_in_100_g_in_mg = forms.FloatField()
+    cholecalciferol_vitamin_D_in_100_g_in_mcg = forms.FloatField()
+    energy_value_in_kcal = forms.FloatField()
 
 
-# if needed to change country name in BalancedNutritionFormula
+# if you need to change country name in BalancedNutritionFormula
 #class RenewBalancedNutritionFormula(forms.Form):
 #    country = forms.CharField(max_length=255)
 

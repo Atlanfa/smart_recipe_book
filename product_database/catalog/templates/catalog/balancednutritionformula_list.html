@@ -1,0 +1,14 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+<h1>Country List</h1>
+{% if balancednutritionformula_list %}
+<ul>
+    {% for bnf in balancednutritionformula_list %}
+    <li>
+        <a href="{{ bnf.get_absolute_url }}">{{ bnf.country }}</a> {% if user.is_authenticated %}- <a href="{% url 'renew-bnf' bnf.id %}">Renew</a>  {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

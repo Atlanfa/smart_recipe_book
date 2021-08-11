@@ -6,6 +6,21 @@ from .choices import SEXES, PAGS, UNITS, BIRTH_YEAR_CHOICES, ALL_YEARS
 from datetime import date
 
 
+class DataForCalculatingTheFormulaForm(forms.Form):
+    amount_of_days = forms.IntegerField()
+    amount_of_money = forms.IntegerField()
+
+    def clean_amount_of_days(self):
+        cd = self.cleaned_data
+        if cd['amount_of_days'] < 1:
+            raise forms.ValidationError("Amount of days can't be lower then one day")
+
+    def clean_amount_of_money(self):
+        cd = self.cleaned_data
+        if cd['amount_of_days'] < 1:
+            raise forms.ValidationError("Amount of days can't be lower then one")
+
+
 class HumanAttributesForm(forms.Form):
     age = forms.ChoiceField(choices= ALL_YEARS)
     sex = forms.ChoiceField(choices=SEXES)

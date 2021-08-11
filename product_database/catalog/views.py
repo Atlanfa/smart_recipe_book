@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Product, Price, Store, Dish, ProductAmount, KitchenUtensil, Profile, BalancedNutritionFormula, HumanAttributes
+from .models import Product, Price, Store, Dish, ProductAmount, KitchenUtensil, Profile, BalancedNutritionFormula, HumanAttributes, MenuForOneDay, MenuForMultipleDays
 from django.views import generic
 from django.contrib.auth.decorators import permission_required, login_required
 from django.shortcuts import get_object_or_404
@@ -11,7 +11,8 @@ from .forms import RenewProductForm, RenewStoreForm, RenewPriceForm, ProductAmou
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.formsets import formset_factory
-from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm, HumanAttributesForm
+from django.contrib.auth.models import User
+from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm, HumanAttributesForm, DataForCalculatingTheFormulaForm
 # Create your views here.
 
 
@@ -332,6 +333,27 @@ class BalancedNutritionFormulaListView(generic.ListView):
     model = BalancedNutritionFormula
     paginate_by = 20
     template_name = 'balancednutritionformula_list'
+
+
+@login_required
+def calculate_formula(request):
+
+    if request.method == 'POST':
+
+        form = DataForCalculatingTheFormulaForm(request.POST)
+        profile = User.objects.get(pk=request.user.id).Profile_set.all()
+        if profile.weight == '' or profile.city == '' or profile.country == '' or profile.date_of_birth == '':
+            return HttpResponse('<h1>First fill your profile</h1>')
+        else:
+            if form.is_valid():
+                balanced_nutrition_formula = BalancedNutritionFormula.objects.all().filter(country=profile.country)[0]
+                menu_inst = MenuForMultipleDays()
+                menu_list = []
+                for day in range(form.cleaned_data['amount_of_days']):
+                    pass
+
+
+
 
 
 @login_required

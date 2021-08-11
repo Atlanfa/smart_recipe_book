@@ -8,6 +8,16 @@ from .choices import PAGS, UNITS, SEXES, ALL_YEARS
 from location_field.models.plain import PlainLocationField
 
 
+class MenuForMultipleDays(models.Model):
+    list_of_menus = models.ManyToManyField('MenuForOneDay')
+
+
+class MenuForOneDay(models.Model):
+    breakfast = models.ForeignKey('Dish', related_name='breakfast', on_delete=models.CASCADE)
+    dinner = models.ForeignKey('Dish', related_name='dinner', on_delete=models.CASCADE)
+    evening_meal = models.ForeignKey('Dish', related_name='evening_meal', on_delete=models.CASCADE)
+
+
 class BalancedNutritionFormula(models.Model):
     country = models.CharField(max_length=255)
     humans_attributes = models.ManyToManyField('HumanAttributes', blank=True)

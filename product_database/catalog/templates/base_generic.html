@@ -31,6 +31,7 @@
                 {% if user.is_authenticated %}
                 <br>
                     <li>User: {{ user.get_username }}</li>
+                    <li><a href="{{ user.profile.get_absolute_url }}">Profile info</a> </li>
                     <li><a href="{% url 'edit' user.profile.id %}">Edit profile</a> </li>
                 <br>
                     <li><a href="{% url 'my-favorite-products' %}">My Favorite products</a> </li>
@@ -49,6 +50,8 @@
                     <br>
                     <li><a href="{% url 'my-dishes' %}">My dishes</a> </li>
                     <li><a href="{% url 'my-kitchen-utensils' %}">My kitchen utensils</a> </li>
+                    <br>
+                    <li><a href="{% url 'calculate_formula' %}">Create menu</a> </li>
                     <br>
                     <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>
 

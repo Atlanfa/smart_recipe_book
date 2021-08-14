@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Username: {{ profile.user.username }}</h1>
+  <p><strong>First name:</strong> {{ profile.user.first_name }} </p>
+  <p><strong>Email:</strong> {{ profile.user.email_address }} </p>
+  <p><strong>Date of birth:</strong> {{ profile.date_of_birth }} </p>
+  <p><strong>Sex:</strong> {{ profile.sex }}</p>
+  <p><strong>Weight:</strong> {{ profile.weight }}</p>
+  <p><strong>Nursing:</strong> {{ profile.nursing }}</p>
+  <p><strong>Group of the working population depending on physical activity:</strong> {{ profile.cpa }}</p>
+  <p><strong>Country:</strong> {{ profile.country }} </p>
+  <p><strong>City:</strong> {{ profile.city }} </p>
+
+
+{% endblock %}

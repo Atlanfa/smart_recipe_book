@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.forms.formsets import formset_factory
 from django.contrib.auth.models import User
 from .forms import UserRegistrationForm, UserEditForm, ProfileEditForm, HumanAttributesForm, DataForCalculatingTheFormulaForm
+from .bnfmc import balanced_nutrition_formula_menu_calculation
 # Create your views here.
 
 
@@ -30,13 +31,12 @@ def edit_profile(request, pk):
             profile_inst.sex = profile_form.cleaned_data['sex']
             profile_inst.weight = profile_form.cleaned_data['weight']
             profile_inst.nursing = profile_form.cleaned_data['nursing']
-            profile_inst.kid_date_of_birth = profile_form.cleaned_data['kid_date_of_birth']
             profile_inst.cpa = profile_form.cleaned_data['cpa']
             profile_inst.city = profile_form.cleaned_data['city']
             profile_inst.country = profile_form.cleaned_data['country']
             profile_inst.location = profile_form.cleaned_data['location']
             profile_inst.save()
-            return HttpResponseRedirect()
+            return HttpResponseRedirect(f'{profile_inst.get_absolute_url()}')
     else:
         user_form = UserEditForm(instance=request.user)
         proposed_profile = Profile.objects.filter(id=pk)
@@ -212,8 +212,6 @@ def delete_dish_from_favorite(request, dish_id):
     return HttpResponseRedirect(reverse('my-favorite-dishes'))
 
 
-
-
 @login_required
 def renew_product(request, pk):
 
@@ -341,19 +339,22 @@ def calculate_formula(request):
     if request.method == 'POST':
 
         form = DataForCalculatingTheFormulaForm(request.POST)
-        profile = User.objects.get(pk=request.user.id).Profile_set.all()
+        profile = request.user.profile
         if profile.weight == '' or profile.city == '' or profile.country == '' or profile.date_of_birth == '':
             return HttpResponse('<h1>First fill your profile</h1>')
         else:
             if form.is_valid():
                 balanced_nutrition_formula = BalancedNutritionFormula.objects.all().filter(country=profile.country)[0]
                 menu_inst = MenuForMultipleDays()
-                menu_list = []
-                for day in range(form.cleaned_data['amount_of_days']):
-                    pass
+                menu = balanced_nutrition_formula_menu_calculation(Dish.objects.all(), int(form.cleaned_data['amount_of_days']), int(form.cleaned_data['amount_of_money']), profile, balanced_nutrition_formula)
+                menu_inst.save()
+                menu_inst.list_of_menus.add(*menu)
+                return render(request, 'catalog/calculated_menu.html', {'menu_inst': menu_inst})
 
+    else:
+        form = DataForCalculatingTheFormulaForm()
 
-
+    return render(request, 'catalog/data_for_calculating_the_formula_form.html', {'form': form})
 
 
 @login_required

@@ -80,12 +80,13 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'srb',
         'USER': 'root',
-        'PASSWORD': 'rootrootroot',
+        #'PASSWORD': 'rootrootroot', #windows password
+        'PASSWORD': 'root',          #linux password
         'HOST': 'localhost',
         'PORT': '3306',
-        #'OPTIONS': {
-        #    'read_default_file': '/etc/my.cnf',
-        #}
+        'OPTIONS': {                #linux conf
+            'read_default_file': '/etc/my.cnf',
+        }
     }
 }
 

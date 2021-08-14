@@ -12,12 +12,12 @@ class DataForCalculatingTheFormulaForm(forms.Form):
 
     def clean_amount_of_days(self):
         cd = self.cleaned_data
-        if cd['amount_of_days'] < 1:
+        if cd['amount_of_days'] < 0:
             raise forms.ValidationError("Amount of days can't be lower then one day")
 
     def clean_amount_of_money(self):
         cd = self.cleaned_data
-        if cd['amount_of_days'] < 1:
+        if cd['amount_of_money'] < 1:
             raise forms.ValidationError("Amount of days can't be lower then one")
 
 

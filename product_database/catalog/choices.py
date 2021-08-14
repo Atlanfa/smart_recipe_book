@@ -4,8 +4,7 @@ UNITS = (
         ('kg', 'Kilogram'),
         ('g', 'Gram'),
         ('l', 'Liter'),
-        ('ml', 'Milliliter'),
-        ('thing', 'Thing')
+        ('ml', 'Milliliter')
     )
 
 SEXES = (

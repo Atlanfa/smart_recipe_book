@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^dishes/$', views.DishListView.as_view(), name='dishes'),
     url(r'^kitchen-utensils/$', views.KitchenUtensilListView.as_view(), name='kitchen_utensils'),
     url(r'^bnf/(?P<pk>\d+)$', views.BalancedNutritionFormulaDetailView.as_view(), name='bnf-detail'),
+    url(r'^profile/(?P<pk>\d+)$', views.ProfileDetailView.as_view(), name='profile-detail'),
     url(r'^kitchen-utensil/(?P<pk>\d+)$', views.KitchenUtensilDetailView.as_view(), name='kitchen_utensil_detail'),
     url(r'^dish/(?P<pk>\d+)$', views.DishDetailView.as_view(), name='dish-detail'),
     url(r'^product/(?P<pk>\d+)$', views.ProductDetailView.as_view(), name='product-detail'),
@@ -45,4 +46,5 @@ urlpatterns = [
     url(r'^kitchen-utensil/create/$', views.KitchenUtensilCreate.as_view(), name='kitchen_utensil_create'),
     url(r'^kitchen-utensil/(?P<pk>\d+)/delete/$', views.KitchenUtensilDelete.as_view(), name='kitchen_utensil_delete'),
     url(r'^price/(?P<pk>\d+)/delete/$', views.PriceDelete.as_view(), name='price_delete'),
+    url(r'^menu/create/$', views.calculate_formula, name='calculate_formula'),
 ]

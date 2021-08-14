@@ -1,0 +1,18 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+{% if menu_inst %}
+  <h1>Store name</h1>
+{% for menu in menu_inst.list_of_menus.all %}
+<p><strong>Dish name: </strong>{{menu.breakfast.name}}</p>
+<p><strong>Dish recipe: </strong>{{menu.breakfast.recipe}}</p>
+<p><strong>Dish kitchen utensils: </strong></p>
+{% for kitchen_utensil in menu.breakfast.kitchen_utensils %}
+<p><strong><a href="{{ kitchen_utensil.get_absolute_url }}">{{kitchen_utensil.name}}</a></strong></p>
+{% endfor %}
+{% for product in menu.breakfast.products %}
+<p><strong><a href="{{ product.product.get_absolute_url }}">{{product.product.name}}</a></strong> {{product.amount}}-{{product.unit}}</p>
+{% endfor %}
+{% endfor %}
+{% endif %}
+{% endblock %}

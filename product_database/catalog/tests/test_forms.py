@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from catalog.forms import RenewProductForm
 
-class RenewBookFormTest(TestCase):
+class RenewProductFormTest(TestCase):
 
     def test_renew_form_name_field_label(self):
         form = RenewProductForm()

@@ -75,20 +75,24 @@ WSGI_APPLICATION = 'product_database.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'srb',
-        'USER': 'root',
-        #'PASSWORD': 'rootrootroot', #windows password
-        'PASSWORD': 'root',          #linux password
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'OPTIONS': {                #linux conf
-            'read_default_file': '/etc/my.cnf',
-        }
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'django_db',
+#         'USER': 'django',
+#         'PASSWORD': 'password',
+#         'HOST': '127.0.0.1',
+#         'PORT': '1433',
+#
+#     }
+# }
 
 
 # Password validation

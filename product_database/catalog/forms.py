@@ -14,12 +14,15 @@ class DataForCalculatingTheFormulaForm(forms.Form):
         cd = self.cleaned_data
         if cd['amount_of_days'] < 0:
             raise forms.ValidationError("Amount of days can't be lower then one day")
+        else:
+            self.amount_of_days = cd['amount_of_days']
 
     def clean_amount_of_money(self):
         cd = self.cleaned_data
         if cd['amount_of_money'] < 1:
             raise forms.ValidationError("Amount of days can't be lower then one")
-
+        else:
+            self.amount_of_days = cd['amount_of_money']
 
 class HumanAttributesForm(forms.Form):
     age = forms.ChoiceField(choices= ALL_YEARS)

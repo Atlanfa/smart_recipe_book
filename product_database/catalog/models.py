@@ -68,9 +68,9 @@ class BalancedNutritionFormula(models.Model):
 
 
 class HumanAttributes(models.Model):
-    age = models.CharField(max_length=2, choices=ALL_YEARS, default='1')
-    sex = models.CharField(max_length=1, choices=SEXES, default='m')
-    pag = models.CharField(max_length=4, choices=PAGS, default='k')
+    age = models.CharField(max_length=100, choices=ALL_YEARS, default='1')
+    sex = models.CharField(max_length=100, choices=SEXES, default='m')
+    pag = models.CharField(max_length=100, choices=PAGS, default='k')
     cpa = models.FloatField()
     weight = models.FloatField()
     proteins = models.FloatField()

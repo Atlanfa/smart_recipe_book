@@ -6,7 +6,7 @@
   <div style="margin-left:20px;margin-top:20px">
     <h2>Dishes with this kitchen utensil</h2>
     {% for dish in kitchenutensil.dish_set.all %}
-    <p><strong>Dish name:</strong><a href="{{ dish.get_absolut_url }}">{{ dish.name }}</a> </p>
+    <p><strong>Dish name:</strong><a href="{{ dish.get_absolute_url }}">{{ dish.name }}</a> </p>
     {% endfor %}
   </div>
 {% endblock %}

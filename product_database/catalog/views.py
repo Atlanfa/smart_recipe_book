@@ -347,9 +347,9 @@ def calculate_formula(request):
                 balanced_nutrition_formula = BalancedNutritionFormula.objects.all().filter(country=profile.country)[0]
                 menu_inst = MenuForMultipleDays()
                 amount_of_days = int(form['amount_of_days'].value())
-                print(amount_of_days)
+
                 amount_of_money = int(form['amount_of_money'].value())
-                print(amount_of_money)
+
                 menu = balanced_nutrition_formula_menu_calculation(Dish.objects.all(), amount_of_days, amount_of_money, profile, balanced_nutrition_formula)
                 menu_inst.save()
                 menu_inst.list_of_menus.add(*menu)

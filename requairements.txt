@@ -2,3 +2,6 @@ Django
 mysqlclient
 django-location-field
 pycountry
+django_extensions
+pygraphviz
+pydotplus

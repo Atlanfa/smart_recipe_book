@@ -40,6 +40,4 @@ def balanced_nutrition_formula_menu_calculation(dishes_list, amount_of_days, amo
         menu_is_ready = True
     for i in menu:
         i.save()
-    print(menu)
-    print(menu[0].evening_meal.name)
     return menu

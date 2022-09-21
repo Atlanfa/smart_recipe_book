@@ -13,7 +13,7 @@
   <h2>Kitchen utensils:</h2>
   <div style="margin-left:20px;margin-top:20px">
       {% for kitchen_utensil in dish.kitchen_utensils.all %}
-      <p>{{ kitchen_utensil.name }}</p>
+      <p><a href="{{ kitchen_utensil.get_absolute_url }}">{{kitchen_utensil.name}}</a></p>
       {% endfor %}
   </div>
 

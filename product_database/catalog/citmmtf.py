@@ -8,7 +8,6 @@ def check_if_the_menu_matches_the_formula(menu_for_one_day, bnf, user_data):
     is_correct = False
     for human_attributes in bnf.humans_attributes.all():
 
-        demo = human_attributes.age
         age_choices = human_attributes.age[:-1].split('-').append('m') if 'm' in human_attributes.age else human_attributes.age.split('-')
         if 'm' in age_choices:
             if 'm' in age:
@@ -90,7 +89,7 @@ def check_if_the_menu_matches_the_formula(menu_for_one_day, bnf, user_data):
                                 human_attributes.cholecalciferol_vitamin_D_in_mcg - 10000.1 < nutrition_data.cholecalciferol_vitamin_D_in_mcg < human_attributes.cholecalciferol_vitamin_D_in_mcg + 10000.1) and (
                                 human_attributes.energy_value_in_kcal - 10000 < nutrition_data.energy_value_in_kcal < human_attributes.energy_value_in_kcal + 10000):
 
-                    print('SUCCESS')
+                    print('SUCCESS')    #для более точных параметров соответствия меню сбалансированости следует обратиться к специалисту диетологу
                     is_correct = True
                     break
                 print('done calculating')
